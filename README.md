@@ -4,7 +4,8 @@ MiniMart 的订单进程（Cart / Order / OrderLine）。领域用语与 v1 契�
 
 - Spring 名：`order-service`
 - 端口：8083
-- 库：`minimart_order`（由 infra 的 `docker/mysql/init.sql` 建）
+- 库：`minimart_order`（由 infra 的 `docker/mysql/init.sql` 建；本进程尚未连库）
+- Feign：product（reserve/confirm/release）、member（抄 Address）、payment（开单收钱）。不自己写 Stock，不自己把单改成 `PAID`。
 
 本机运行（Nacos 需已起，`NACOS_ADDR=127.0.0.1:8848`）：
 

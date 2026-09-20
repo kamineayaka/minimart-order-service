@@ -3,11 +3,9 @@ spring:
     name: order-service
   config:
     import:
+      - optional:nacos:minimart-common.yaml?group=MINIMART
       - optional:nacos:${spring.application.name}.yaml?group=MINIMART
   cloud:
-    # SCA 2025.1.0.0 targets Boot 4.0.x; this project uses Boot 4.1.1 + Cloud 2025.1.3.
-    compatibility-verifier:
-      enabled: false
     nacos:
       server-addr: ${NACOS_ADDR:127.0.0.1:8848}
       discovery:
@@ -17,6 +15,12 @@ spring:
         namespace: ${NACOS_NS:dev}
         group: MINIMART
         file-extension: yaml
+    openfeign:
+      client:
+        config:
+          default:
+            connectTimeout: 2000
+            readTimeout: 5000
 
 server:
   port: 8083
