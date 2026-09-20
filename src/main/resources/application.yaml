@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: order-service
+  config:
+    import:
+      - optional:nacos:${spring.application.name}.yaml?group=MINIMART
+  cloud:
+    # SCA 2025.1.0.0 targets Boot 4.0.x; this project uses Boot 4.1.1 + Cloud 2025.1.3.
+    compatibility-verifier:
+      enabled: false
+    nacos:
+      server-addr: ${NACOS_ADDR:127.0.0.1:8848}
+      discovery:
+        namespace: ${NACOS_NS:dev}
+        group: MINIMART
+      config:
+        namespace: ${NACOS_NS:dev}
+        group: MINIMART
+        file-extension: yaml
+
+server:
+  port: 8083
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: when_authorized
