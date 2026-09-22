@@ -1,26 +1,28 @@
 spring:
   application:
     name: order-service
-  config:
-    import:
-      - optional:nacos:minimart-common.yaml?group=MINIMART
-      - optional:nacos:${spring.application.name}.yaml?group=MINIMART
+  jackson:
+    default-property-inclusion: non_null
   cloud:
-    nacos:
-      server-addr: ${NACOS_ADDR:127.0.0.1:8848}
-      discovery:
-        namespace: ${NACOS_NS:dev}
-        group: MINIMART
-      config:
-        namespace: ${NACOS_NS:dev}
-        group: MINIMART
-        file-extension: yaml
+    compatibility-verifier:
+      enabled: true
     openfeign:
       client:
         config:
           default:
             connectTimeout: 2000
             readTimeout: 5000
+            loggerLevel: basic
+          product-service:
+            url: http://${minimart.services.product.host:product-service}:${minimart.services.product.port:8082}
+          member-service:
+            url: http://${minimart.services.member.host:member-service}:${minimart.services.member.port:8081}
+          payment-service:
+            url: http://${minimart.services.payment.host:payment-service}:${minimart.services.payment.port:8084}
+  datasource:
+    url: jdbc:mysql://${DB_HOST:host.docker.internal}:${DB_PORT:3306}/minimart_order?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: ${DB_USERNAME:minimart}
+    password: ${DB_PASSWORD:minimart}
 
 server:
   port: 8083
@@ -33,3 +35,19 @@ management:
   endpoint:
     health:
       show-details: when_authorized
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{correlationId:-}]"
+
+minimart:
+  services:
+    member:
+      host: member-service
+      port: 8081
+    product:
+      host: product-service
+      port: 8082
+    payment:
+      host: payment-service
+      port: 8084

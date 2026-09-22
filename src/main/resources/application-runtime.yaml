@@ -1,5 +1,0 @@
-spring:
-  config:
-    import:
-      - nacos:minimart-common.yaml?group=MINIMART
-      - nacos:${spring.application.name}.yaml?group=MINIMART
